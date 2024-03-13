@@ -10,7 +10,7 @@
 
 <form action="/upload" method="post" enctype="multipart/form-data">
     @csrf
-    <input type="file" name="image">
+    <input type="file" name="images[]" multiple>
     <button type="submit">Загрузить</button>
 </form>
 

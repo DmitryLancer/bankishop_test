@@ -8,6 +8,6 @@ Route::get('/', function () {
 
 
 Route::get('/upload', [App\Http\Controllers\ImageController::class, 'showUploadForm']);
-Route::post('/upload', [App\Http\Controllers\Controller::class, 'uploadImage']);
+Route::post('/upload', [App\Http\Controllers\ImageController::class, 'uploadImage']);
 
 
