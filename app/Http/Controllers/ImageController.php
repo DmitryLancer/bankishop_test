@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use ZipArchive;
 
 class ImageController extends Controller
 {
@@ -43,5 +44,29 @@ class ImageController extends Controller
 
         return 'Images uploaded successfully!';
     }
+
+    public function showImages(Request $request)
+    {
+        $sort = $request->input('sort');
+        $direction = $request->input('direction', 'asc');
+        $images = Image::orderBy($sort, $direction)->get();
+
+        $nextDirection = ($direction === 'asc') ? 'desc' : 'asc';
+
+        return view('images.show', compact('images', 'nextDirection'));
+    }
+
+    public function downloadImage($id) {
+        $image = Image::find($id);
+        $zipFileName = $image->filename . '.zip';
+        $zip = new ZipArchive;
+        if ($zip->open(public_path($zipFileName), ZipArchive::CREATE) === TRUE) {
+            $zip->addFile(public_path('uploads/'.$image->filename), $image->filename);
+            $zip->close();
+        }
+
+        return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+    }
+
 
 }
