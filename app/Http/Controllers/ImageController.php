@@ -49,7 +49,14 @@ class ImageController extends Controller
     {
         $sort = $request->input('sort');
         $direction = $request->input('direction', 'asc');
-        $images = Image::orderBy($sort, $direction)->get();
+
+        $query = Image::query();
+
+        if ($sort) {
+            $query->orderBy($sort, $direction);
+        }
+
+        $images = $query->get();
 
         $nextDirection = ($direction === 'asc') ? 'desc' : 'asc';
 
@@ -66,6 +73,20 @@ class ImageController extends Controller
         }
 
         return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+    }
+
+    public function getImagesJson() {
+        $images = Image::all();
+        return response()->json($images);
+    }
+
+    public function getImageJson($id) {
+        $image = Image::find($id);
+        if ($image) {
+            return response()->json($image);
+        } else {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
     }
 
 

@@ -15,3 +15,7 @@ Route::post('/upload', [App\Http\Controllers\ImageController::class, 'uploadImag
 Route::get('/download/{id}', [App\Http\Controllers\ImageController::class, 'downloadImage'])->name('download.image');
 
 
+Route::get('/api/images', [App\Http\Controllers\ImageController::class, 'getImagesJson']);
+Route::get('/api/images/{id}', [App\Http\Controllers\ImageController::class, 'getImageJson']);
+
+
